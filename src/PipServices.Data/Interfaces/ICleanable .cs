@@ -1,7 +1,9 @@
-﻿namespace PipServices.Data.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace PipServices.Data.Interfaces
 {
     public interface ICleanable
     {
-        void Clear(string correlationId);
+        Task ClearAsync(string correlationId);
     }
 }

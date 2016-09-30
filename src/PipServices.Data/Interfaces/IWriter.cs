@@ -1,9 +1,11 @@
-﻿namespace PipServices.Data.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace PipServices.Data.Interfaces
 {
     public interface IWriter<T, in TI>
     {
-        T Create(string correlationId, T entity);
-        T Update(string correlationId, T entity);
-        T DeleteById(string correlationId, TI id);
+        Task<T> CreateAsync(string correlationId, T entity);
+        Task<T> UpdateAsync(string correlationId, T entity);
+        Task<T> DeleteByIdAsync(string correlationId, TI id);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PipServices.Data.Interfaces
 {
-    public interface ILoader<out T>
-        where T : class
+    public interface ILoader<T>
     {
-        IEnumerable<T> Load(string correlationId);
+        Task<IEnumerable<T>> LoadAsync(string correlationId);
     }
 }

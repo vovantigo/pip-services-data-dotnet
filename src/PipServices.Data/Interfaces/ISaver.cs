@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PipServices.Data.Interfaces
 {
     public interface ISaver<in T>
-        where T : class
     {
-        void Save(string correlationId, IEnumerable<T> items);
+        Task SaveAsync(string correlationId, IEnumerable<T> items);
     }
 }
