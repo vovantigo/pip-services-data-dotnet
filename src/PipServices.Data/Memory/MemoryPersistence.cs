@@ -23,9 +23,9 @@ namespace PipServices.Data.Memory
         protected ILogger Logger = new NullLogger();
 
         protected int MaxPageSize = DefaultMaxPageSize;
-        protected ImmutableList<T> Items;
-        protected ILoader<T> Loader;
-        protected ISaver<T> Saver;
+        protected ImmutableList<T> Items = ImmutableList.Create<T>();
+        private readonly ILoader<T> _loader;
+        private readonly ISaver<T> _saver;
 
         protected readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
@@ -37,8 +37,8 @@ namespace PipServices.Data.Memory
         protected MemoryPersistence(ILoader<T> loader, ISaver<T> saver)
         {
             TypeName = typeof(T).Name;
-            Loader = loader;
-            Saver = saver;
+            _loader = loader;
+            _saver = saver;
         }
 
         public async Task ClearAsync(string correlationId)
@@ -64,7 +64,7 @@ namespace PipServices.Data.Memory
             return SaveAsync(correlationId);
         }
 
-        public void Configure(ConfigParams config)
+        public virtual void Configure(ConfigParams config)
         {
             MaxPageSize = config.GetAsIntegerWithDefault("max_page_size", DefaultMaxPageSize);
         }
@@ -97,14 +97,14 @@ namespace PipServices.Data.Memory
 
         private async Task LoadAsync(string correlationId)
         {
-            if (Loader == null)
+            if (_loader == null)
                 return;
 
             Lock.EnterWriteLock();
 
             try
             {
-                var loadedItems = await Loader.LoadAsync(correlationId);
+                var loadedItems = await _loader.LoadAsync(correlationId);
 
                 Items = ImmutableList.CreateRange(loadedItems);
 
@@ -118,14 +118,14 @@ namespace PipServices.Data.Memory
 
         public async Task SaveAsync(string correlationId)
         {
-    	    if (Saver == null)
+    	    if (_saver == null)
                 return;
 
             Lock.EnterWriteLock();
 
             try
             {
-                await Saver.SaveAsync(correlationId, Items);
+                await _saver.SaveAsync(correlationId, Items);
 
                 Logger.Trace(correlationId, "Saved {0} of {1}", Items.Count, TypeName);
             }

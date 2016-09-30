@@ -1,69 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using PipServices.Commons.Config;
+﻿using PipServices.Commons.Config;
 using PipServices.Commons.Data;
-using PipServices.Commons.Log;
-using PipServices.Commons.Refer;
-using PipServices.Commons.Run;
-using PipServices.Data.Interfaces;
+using PipServices.Data.Memory;
 
 namespace PipServices.Data.File
 {
-    public class FilePersistence<T, TI> : IReferenceable, IConfigurable, IOpenable, IClosable, ICleanable,
-        IWriter<T, TI>, IGetter<T, TI>, ISetter<T>
+    public class FilePersistence<T, TI> : MemoryPersistence<T, TI>
         where T : IIdentifiable<TI>
         where TI : class
     {
-        public void Clear(string correlationId)
+        protected readonly JsonFilePersister<T> Persister;
+
+        private FilePersistence(JsonFilePersister<T> persister)
+            : base(persister, persister)
         {
-            throw new NotImplementedException();
+            Persister = persister;
         }
 
-        public Task CloseAsync(string correlationId)
+        public FilePersistence()
+            : this(new JsonFilePersister<T>())
         {
-            throw new NotImplementedException();
         }
 
-        public void Configure(ConfigParams config)
+        public override void Configure(ConfigParams config)
         {
-            throw new NotImplementedException();
-        }
+            base.Configure(config);
 
-        public T GetOneById(string correlationId, TI id)
-        {
-            throw new NotImplementedException();
+            Persister.Configure(config);
         }
-
-        public Task OpenAsync(string correlationId, CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetReferences(IReferences references)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T SetAsync(string correlationId, T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T CreateAsync(string correlationId, T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T DeleteByIdAsync(string correlationId, TI id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T UpdateAsync(string correlationId, T entity)
-        {
-            throw new NotImplementedException();
-        }
-
     }
+}
