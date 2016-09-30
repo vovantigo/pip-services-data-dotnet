@@ -29,7 +29,7 @@ namespace PipServices.Data.Memory
 
         protected readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-        protected MemoryPersistence()
+        public MemoryPersistence()
             : this(null, null)
         {
         }
