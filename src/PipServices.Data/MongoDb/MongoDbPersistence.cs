@@ -14,7 +14,7 @@ namespace PipServices.Data.MongoDb
         where T : IIdentifiable<TI>
         where TI : class
     {
-        public void Clear(string correlationId)
+        public Task ClearAsync(string correlationId)
         {
             throw new NotImplementedException();
         }
@@ -44,24 +44,24 @@ namespace PipServices.Data.MongoDb
             throw new NotImplementedException();
         }
 
-        public T SetAsync(string correlationId, T entity)
+        public Task<T> SetAsync(string correlationId, T entity)
         {
             throw new NotImplementedException();
         }
 
-        public T CreateAsync(string correlationId, T entity)
+        public Task<T> CreateAsync(string correlationId, T entity)
         {
             throw new NotImplementedException();
         }
 
-        public T DeleteByIdAsync(string correlationId, TI id)
+        public Task<T> DeleteByIdAsync(string correlationId, TI id)
         {
             throw new NotImplementedException();
         }
 
-        public T UpdateAsync(string correlationId, T entity)
+        public Task<T> UpdateAsync(string correlationId, T entity)
         {
             throw new NotImplementedException();
         }
-
     }
+}
